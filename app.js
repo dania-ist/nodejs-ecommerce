@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const mountRoutes = require("./routes");
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
+mountRoutes(app);
 
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
   app.listen(PORT, () => {
