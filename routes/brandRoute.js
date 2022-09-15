@@ -7,6 +7,12 @@ const {
   updateBrand,
   deleteBrand,
 } = require("../services/brandService");
+const {
+  getBrandValidator,
+  updateBrandValidator,
+  deleteBrandValidator,
+  createBrandValidator,
+} = require("../validators/brandValidator");
 
 const router = express.Router();
 
