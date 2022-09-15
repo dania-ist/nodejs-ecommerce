@@ -7,14 +7,23 @@ const {
   updateSubCategory,
   deleteSubCategory,
 } = require("../services/subcategoryService");
+const {
+  createSubCategoryValidator,
+  updateSubCategoryValidator,
+  getSubCategoryValidator,
+  deleteSubCategoryValidator,
+} = require("../validators/subcategoryValidator");
 
 const router = express.Router({ mergeParams: true });
 
-router.route("/").post(createSubCategory).get(getSubCategories);
+router
+  .route("/")
+  .post(createSubCategoryValidator, createSubCategory)
+  .get(getSubCategoryValidator, getSubCategories);
 router
   .route("/:id")
   .get(getSubCategory)
-  .put(updateSubCategory)
-  .delete(deleteSubCategory);
+  .put(updateSubCategoryValidator, updateSubCategory)
+  .delete(deleteSubCategoryValidator, deleteSubCategory);
 
 module.exports = router;
