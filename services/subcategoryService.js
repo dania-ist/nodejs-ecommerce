@@ -4,11 +4,8 @@ const asyncHandler = require("express-async-handler");
 const SubCategory = require("../models/subCategoryModel");
 
 exports.createSubCategory = asyncHandler(async (req, res) => {
-  const { name, category } = req.body;
   const subCategory = await SubCategory.create({
-    name,
-    slug: slugify(name),
-    category,
+    ...req.body,
   });
   res.status(201).json({ data: subCategory });
 });
@@ -47,7 +44,7 @@ exports.updateSubCategory = asyncHandler(async (req, res, next) => {
 
   const subCategory = await SubCategory.findOneAndUpdate(
     { _id: id },
-    { name, slug: slugify(name), category },
+    { ...req.body },
     { new: true }
   );
 

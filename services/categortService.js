@@ -4,8 +4,7 @@ const asyncHandler = require("express-async-handler");
 const Category = require("../models/categoryModel");
 
 exports.createCategory = asyncHandler(async (req, res) => {
-  const name = req.body.name;
-  const category = await Category.create({ name, slug: slugify(name) });
+  const category = await Category.create({ ...req.body });
   res.status(201).json({ data: category });
 });
 
@@ -26,11 +25,10 @@ exports.getCategory = asyncHandler(async (req, res) => {
 
 exports.updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
 
   const category = await Category.findOneAndUpdate(
     { _id: id },
-    { name, slug: slugify(name) },
+    { ...req.body },
     { new: true }
   );
 

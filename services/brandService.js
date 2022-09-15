@@ -4,8 +4,7 @@ const asyncHandler = require("express-async-handler");
 const Brand = require("../models/brandModel");
 
 exports.createBrand = asyncHandler(async (req, res) => {
-  const { name } = req.body;
-  const brand = await Brand.create({ name, slug: slugify(name) });
+  const brand = await Brand.create({ ...req.body });
   res.status(201).json({ data: brand });
 });
 
@@ -27,11 +26,10 @@ exports.getBrand = asyncHandler(async (req, res, next) => {
 
 exports.updateBrand = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const { name } = req.body;
 
   const brand = await Brand.findOneAndUpdate(
     { _id: id },
-    { name, slug: slugify(name) },
+    { ...req.body },
     { new: true }
   );
 

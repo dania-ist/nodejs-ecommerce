@@ -6,7 +6,6 @@ const Product = require("../models/productModel");
 exports.createProduct = asyncHandler(async (req, res) => {
   const product = await Product.create({
     ...req.body,
-    slug: slugify(req.body.title),
   });
   res.status(201).json({ data: product });
 });
@@ -32,7 +31,7 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 
   const product = await Product.findOneAndUpdate(
     { _id: id },
-    { ...req.body, slug: slugify(req.body.title) },
+    { ...req.body },
     { new: true }
   );
 
