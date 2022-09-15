@@ -7,10 +7,20 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../services/productService");
+const {
+  createProductValidator,
+  getProductValidator,
+  updateProductValidator,
+  deleteProductValidator,
+} = require("../validators/productValidation");
 
 const router = express.Router();
 
-router.route("/").get(getProducts).post(createProduct);
-router.route("/:id").get(getProduct).put(updateProduct).delete(deleteProduct);
+router.route("/").get(getProducts).post(createProductValidator, createProduct);
+router
+  .route("/:id")
+  .get(getProductValidator, getProduct)
+  .put(updateProductValidator, updateProduct)
+  .delete(deleteProductValidator, deleteProduct);
 
 module.exports = router;

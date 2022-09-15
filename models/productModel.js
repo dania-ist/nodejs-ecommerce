@@ -34,11 +34,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
     },
     colors: [String],
-
-    // imageCover: {
-    //   type: String,
-    //   required: true,
-    // },
+    imageCover: {
+      type: String,
+      // required: true,
+    },
     images: [String],
     category: {
       type: Schema.ObjectId,
