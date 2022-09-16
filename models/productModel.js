@@ -36,7 +36,7 @@ const productSchema = new mongoose.Schema(
     colors: [String],
     imageCover: {
       type: String,
-      // required: true,
+      required: true,
     },
     images: [String],
     category: {

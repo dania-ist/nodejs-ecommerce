@@ -1,13 +1,12 @@
 const multer = require("multer");
 
-const uploadSingleImage = (fieldName) => {
+const uploadMultiImages = (arrayOfFields) => {
   const storage = multer.memoryStorage();
 
   const fileFilter = function (req, file, cb) {
     if (file.mimetype.startsWith("image")) {
       cb(null, true);
     } else {
-      // cb(new ApiError("Only Images allowed", 400), false);
       const error = new Error("Only Images allowed");
       error.statusCode = 400;
       console.log(error);
@@ -16,9 +15,9 @@ const uploadSingleImage = (fieldName) => {
   };
 
   const upload = multer({ storage, fileFilter });
-  return upload.single(fieldName);
+  return upload.fields(arrayOfFields);
 };
 
 module.exports = {
-  uploadSingleImage,
+  uploadMultiImages,
 };

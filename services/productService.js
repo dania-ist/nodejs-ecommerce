@@ -1,7 +1,9 @@
-const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
+const { v4: uuidv4 } = require("uuid");
+const sharp = require("sharp");
 
 const Product = require("../models/productModel");
+const { uploadMultiImages } = require("../middlewares/uploadMutiImages");
 
 exports.createProduct = asyncHandler(async (req, res) => {
   const product = await Product.create({
@@ -43,4 +45,38 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
   await Product.findByIdAndDelete(id);
 
   res.status(200).json({ message: "Deleted Product." });
+});
+
+exports.uploadProductImages = uploadMultiImages([
+  { name: "imageCover", maxCount: 1 },
+  { name: "images", maxCount: 8 },
+]);
+
+exports.imageProcessing = asyncHandler(async (req, res, next) => {
+  if (req.files.imageCover) {
+    const filename = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
+    await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 1333)
+      .toFormat("jpeg")
+      .jpeg({ quality: 95 })
+      .toFile(`uploads/products/${filename}`);
+
+    req.body.imageCover = `${process.env.BASE_URL}/products/${filename}`;
+  }
+  if (req.files.images) {
+    req.body.images = [];
+    await Promise.all(
+      req.files.images.map(async (img, index) => {
+        const filename = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpeg`;
+        await sharp(img.buffer)
+          .resize(2000, 1333)
+          .toFormat("jpeg")
+          .jpeg({ quality: 95 })
+          .toFile(`uploads/products/${filename}`);
+
+        req.body.images.push(`${process.env.BASE_URL}/products/${filename}`);
+      })
+    );
+  }
+  next();
 });
