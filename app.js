@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const path = require("path");
 const mountRoutes = require("./routes");
 
 dotenv.config();
@@ -11,6 +12,7 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "uploads")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

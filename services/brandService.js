@@ -1,7 +1,9 @@
-const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
+const { v4: uuidv4 } = require("uuid");
+const sharp = require("sharp");
 
 const Brand = require("../models/brandModel");
+const { uploadSingleImage } = require("../middlewares/uploadSingleImage");
 
 exports.createBrand = asyncHandler(async (req, res) => {
   const brand = await Brand.create({ ...req.body });
@@ -41,4 +43,21 @@ exports.deleteBrand = asyncHandler(async (req, res, next) => {
   await Brand.findByIdAndDelete(id);
 
   res.status(200).json({ message: "Deleted brand." });
+});
+
+exports.uploadBrandImage = uploadSingleImage("image");
+
+exports.imageProcessing = asyncHandler(async (req, res, next) => {
+  console.log(req.file);
+  if (req.file) {
+    const filename = `brand-${uuidv4()}-${Date.now()}.jpeg`;
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("jpeg")
+      .jpeg({ quality: 95 })
+      .toFile(`uploads/brands/${filename}`);
+
+    req.body.image = `${process.env.BASE_URL}/brands/${filename}`;
+  }
+  next();
 });
