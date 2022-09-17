@@ -48,7 +48,6 @@ exports.deleteBrand = asyncHandler(async (req, res, next) => {
 exports.uploadBrandImage = uploadSingleImage("image");
 
 exports.imageProcessing = asyncHandler(async (req, res, next) => {
-  console.log(req.file);
   if (req.file) {
     const filename = `brand-${uuidv4()}-${Date.now()}.jpeg`;
     await sharp(req.file.buffer)

@@ -1,4 +1,5 @@
 const express = require("express");
+const { isAuth, allowedTo } = require("../services/authService");
 
 const {
   getBrands,
@@ -22,11 +23,25 @@ const router = express.Router();
 router
   .route("/")
   .get(getBrands)
-  .post(uploadBrandImage, imageProcessing, createBrandValidator, createBrand);
+  .post(
+    isAuth,
+    allowedTo("admin"),
+    uploadBrandImage,
+    imageProcessing,
+    createBrandValidator,
+    createBrand
+  );
 router
   .route("/:id")
   .get(getBrandValidator, getBrand)
-  .put(uploadBrandImage, imageProcessing, updateBrandValidator, updateBrand)
-  .delete(deleteBrandValidator, deleteBrand);
+  .put(
+    isAuth,
+    allowedTo("admin"),
+    uploadBrandImage,
+    imageProcessing,
+    updateBrandValidator,
+    updateBrand
+  )
+  .delete(isAuth, allowedTo("admin"), deleteBrandValidator, deleteBrand);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const express = require("express");
+const { allowedTo, isAuth } = require("../services/authService");
 
 const {
   getCategories,
@@ -23,11 +24,11 @@ router.use("/:categoryId/subcategories", subcategoriesRoute);
 router
   .route("/")
   .get(getCategories)
-  .post(createCategoryValidator, createCategory);
+  .post(isAuth, allowedTo("admin"), createCategoryValidator, createCategory);
 router
   .route("/:id")
   .get(getCategoryValidator, getCategory)
-  .put(updateCategoryValidator, updateCategory)
-  .delete(deleteCategoryValidator, deleteCategory);
+  .put(isAuth, allowedTo("admin"), updateCategoryValidator, updateCategory)
+  .delete(isAuth, allowedTo("admin"), deleteCategoryValidator, deleteCategory);
 
 module.exports = router;

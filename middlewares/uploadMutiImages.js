@@ -9,7 +9,7 @@ const uploadMultiImages = (arrayOfFields) => {
     } else {
       const error = new Error("Only Images allowed");
       error.statusCode = 400;
-      console.log(error);
+
       cb(error, false);
     }
   };

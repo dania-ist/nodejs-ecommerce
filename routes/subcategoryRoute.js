@@ -1,4 +1,5 @@
 const express = require("express");
+const { isAuth, allowedTo } = require("../services/authService");
 
 const {
   createSubCategory,
@@ -18,12 +19,28 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .post(createSubCategoryValidator, createSubCategory)
+  .post(
+    isAuth,
+    allowedTo("admin"),
+    createSubCategoryValidator,
+    createSubCategory
+  )
   .get(getSubCategoryValidator, getSubCategories);
+
 router
   .route("/:id")
   .get(getSubCategory)
-  .put(updateSubCategoryValidator, updateSubCategory)
-  .delete(deleteSubCategoryValidator, deleteSubCategory);
+  .put(
+    isAuth,
+    allowedTo("admin"),
+    updateSubCategoryValidator,
+    updateSubCategory
+  )
+  .delete(
+    isAuth,
+    allowedTo("admin"),
+    deleteSubCategoryValidator,
+    deleteSubCategory
+  );
 
 module.exports = router;

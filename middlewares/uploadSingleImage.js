@@ -10,7 +10,6 @@ const uploadSingleImage = (fieldName) => {
       // cb(new ApiError("Only Images allowed", 400), false);
       const error = new Error("Only Images allowed");
       error.statusCode = 400;
-      console.log(error);
       cb(error, false);
     }
   };
