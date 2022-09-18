@@ -23,7 +23,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
 
 exports.getProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("reviews");
 
   res.status(200).json({ data: product });
 });

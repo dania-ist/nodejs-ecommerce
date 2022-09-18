@@ -4,6 +4,7 @@ const asyncHandler = require("express-async-handler");
 const SubCategory = require("../models/subCategoryModel");
 
 exports.createSubCategory = asyncHandler(async (req, res) => {
+  if (!req.body.category) req.body.category = req.params.categoryId;
   const subCategory = await SubCategory.create({
     ...req.body,
   });
@@ -15,7 +16,6 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
   const limit = req.query.limit * 1 || 5;
   const skip = (page - 1) * limit;
 
-  if (!req.body.category) req.body.category = req.params.categoryId;
   let filterObject = {};
   if (req.params.categoryId) {
     filterObject = { category: req.params.categoryId };
