@@ -132,14 +132,14 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
 });
 
 exports.applyCoupon = asyncHandler(async (req, res, next) => {
-  // 1) Get coupon based on coupon name
   const coupon = await Coupon.findOne({
     name: req.body.coupon,
     expire: { $gt: Date.now() },
   });
 
   if (!coupon) {
-    return next(new ApiError(`Coupon is invalid or expired`));
+    const error = new Error(`Coupon is invalid or expired`);
+    throw error;
   }
 
   const cart = await Cart.findOne({ user: req.user._id });
